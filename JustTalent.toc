@@ -1,9 +1,12 @@
 ## Interface: 100105
 ## Title: JustTalent
+## Author: gori, Igor François
 ## Version: 0.0.1
+## SavedVariables: JustTalentDB
+## OptionalDeps: Ace3
 ## Notes: JustTalent providing you the best talent used by the greaters players
 
 # File used by the addon
 
-Config.lua
+Libs\Libs.xml
 JustTalent.lua
