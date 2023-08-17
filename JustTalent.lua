@@ -4,14 +4,22 @@
 local JustTalent = LibStub("AceAddon-3.0"):NewAddon("JustTalent", "AceConsole-3.0")
 local JustTalentGUI = LibStub("AceGUI-3.0")
 local JustTalentConsole = LibStub("AceConsole-3.0")
-
-local playerName = UnitName("player")
+-- char, realm, class, race, faction, factionrealm, profile, global
+local JustTalentDB = LibStub("AceDB-3.0"):New("JustTalentDB")
 
 local editBoxValuePlayerName
 local editBoxValuePlayerRealm
 
 function GetProfileName()
     return "Profil ---> " .. PlayerName
+end
+
+function JustTalent:SetProfile()
+    self.db.char.current = playerName
+    self.db.realm.current = realmName
+    self.db.race.current = raceName
+    self.db.class.current = className
+    self.db.faction.current = factionName
 end
 
 -----------------------------------------------------------------------
@@ -21,6 +29,13 @@ end
 -- Code that you want to run when the addon is first loaded goes here.
 function JustTalent:OnInitialize()
     JustTalentConsole:Print("[Addon] JustTalent - Lifecycle: Initialized")
+    local playerName = UnitName("player")
+    local raceName = UnitRace("player")
+    local className = UnitClass("player")
+    local factionName = UnitFactionGroup("player")
+    local realmName = GetRealmName()
+    self.db = JustTalentDB
+    self.db:SetProfile(playerName)
 end
 
 -- Called when the addon is enabled
