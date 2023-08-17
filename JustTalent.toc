@@ -1,0 +1,9 @@
+## Interface: 100105
+## Title: JustTalent
+## Version: 0.0.1
+## Notes: JustTalent providing you the best talent used by the greaters players
+
+# File used by the addon
+
+Config.lua
+JustTalent.lua

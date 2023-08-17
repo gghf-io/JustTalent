@@ -1,0 +1,1 @@
+# Wow Addon `JustTalent` can help you to getting better talent 
