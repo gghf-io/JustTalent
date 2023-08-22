@@ -1,89 +1,112 @@
 -----------------------------------------------------------------------
 -- JustTalent
 -----------------------------------------------------------------------
-local JustTalent = LibStub("AceAddon-3.0"):NewAddon("JustTalent", "AceConsole-3.0")
-local JustTalentGUI = LibStub("AceGUI-3.0")
-local JustTalentConsole = LibStub("AceConsole-3.0")
+local Self = LibStub("AceAddon-3.0"):NewAddon("JustTalent", "AceConsole-3.0")
+local GUI = LibStub("AceGUI-3.0")
 -- char, realm, class, race, faction, factionrealm, profile, global
-local JustTalentDB = LibStub("AceDB-3.0"):New("JustTalentDB")
+-- local JustTalentDB = LibStub("AceDB-3.0"):New("JustTalentDB")
 
-local editBoxValuePlayerName
-local editBoxValuePlayerRealm
+local Data = {
+    player = {
+        name = UnitName("player"),
+        class = UnitClass("player"),
+        faction = UnitFactionGroup("player"),
+        spec = {
+            id = -1,
+            name = "",
+            icon = -1,
+        }
+    }
+}
+local GUIConf = {
+    frame = {
+        title = "JustTalent",
+        status = "JustTalent-0.0.1 --- Development mode",
+        width = 320,
+        height = 150,
+        layout = "List",
+        isResizable = false
+    },
+    labelSearch = {
+        text = "",
+        fullWidth = true
+    },
+    btnSearch = {
+        text = "Recherche les meilleurs talents pour ton personnage",
+        width = 300
+    },
+}
 
-function JustTalent:SetCurrentProfile(db)
-    -- activeProfile = db:GetCurrentProfile()
-    -- possibleProfiles, numProfiles = db:GetProfiles()
-    local playerName = UnitName("player")
-    local raceName = UnitRace("player")
-    local className = UnitClass("player")
-    local factionName = UnitFactionGroup("player")
-    local realmName = GetRealmName()
-    db.char.current = playerName
-    db.realm.current = realmName
-    db.race.current = raceName
-    db.class.current = className
-    db.faction.current = factionName
-    db:SetProfile(playerName)
+function Self:SetPlayerLink(realm,name)
+    return "https://worldofwarcraft.blizzard.com/fr-fr/character/eu/" .. string.lower(realm) .. "/" .. string.lower(name)
 end
 
 -----------------------------------------------------------------------
 -- Addon Lifecycle
 -----------------------------------------------------------------------
 
+-- local raceName = UnitRace("player")
+-- local className = UnitClass("player")
+-- local factionName = UnitFactionGroup("player")
+-- local spec = 
+
+-- self.db = JustTalentDB
+-- JustTalent:SetCurrentProfile(self.db)
 -- Code that you want to run when the addon is first loaded goes here.
-function JustTalent:OnInitialize()
-    JustTalentConsole:Print("[Addon] JustTalent - Lifecycle: Initialized")
-    self.db = JustTalentDB
-    JustTalent:SetCurrentProfile(self.db)
+function Self:OnInitialize()
+    Self:Print("[Event] Lifecycle: Initialized for player " .. Data.playerName .. " !")
 end
 
 -- Called when the addon is enabled
-function JustTalent:OnEnable()
-    JustTalentConsole:Print("[Addon] JustTalent - Lifecycle: Enabled")
+function Self:OnEnable()
+    Self:Print("[Event] Lifecycle: Enabled ".. Data.playerName .. " !")
 end
 
 -- Called when the addon is disabled
-function JustTalent:OnDisable()
-    JustTalentConsole:Print("[Addon] JustTalent - Lifecycle: Disabled")
+function Self:OnDisable()
+    Self:Print("[Event] Lifecycle: Disabled")
 end
 
 -----------------------------------------------------------------------
 -- Register Slash command
 -----------------------------------------------------------------------
-JustTalent:RegisterChatCommand("jt", "SlashCommandWelcomePlayer")
+Self:RegisterChatCommand("jt", "SlashCommandOpenMainFrame")
 
-function JustTalent:SlashCommandWelcomePlayer()
-    local Frame = JustTalentGUI:Create("Frame")
-    -- Create a Frame
-    Frame:SetTitle("JustTalent")
-    Frame:SetStatusText("JustTalent-0.0.1 --- Development mode")
-    Frame:SetCallback("OnClose",function(widget) JustTalentGUI:Release(widget) end)
-    -- "List", "Fill" and "Flow"
-    Frame:SetLayout("List")
-    Frame:EnableResize(false)
-    
-    -- Create a Label Player Name
-    local Frame_EditBox_Name = JustTalentGUI:Create("EditBox")
-    Frame_EditBox_Name:SetLabel("Entrez le nom d'un joueur :")
-    Frame_EditBox_Name:SetWidth(400)
-    Frame_EditBox_Name:SetCallback("OnEnterPressed", function(widget, event, text) editBoxValuePlayerName = text end)
-    Frame:AddChild(Frame_EditBox_Name)
+function Self:SlashCommandOpenMainFrame()
+    local frame = GUI:Create("Frame")
+    frame:SetHeight(GUIConf.frame.height)
+    frame:SetWidth(GUIConf.frame.width)
+    frame:SetTitle(GUIConf.frame.title)
+    frame:SetStatusText(GUIConf.frame.status)
+    frame:SetLayout(GUIConf.frame.layout)
+    frame:EnableResize(GUIConf.frame.isResizable)
+    frame:SetCallback("OnClose",function(widget) GUI:Release(widget) end)
 
-    -- Create a Label Player Name
-    local Frame_EditBox_Realm = JustTalentGUI:Create("EditBox")
-    Frame_EditBox_Realm:SetLabel("Entrez le nom du Serveur de ce joueur :")
-    Frame_EditBox_Realm:SetWidth(400)
-    Frame_EditBox_Realm:SetCallback("OnEnterPressed", function(widget, event, text) editBoxValuePlayerRealm = text end)
-    Frame:AddChild(Frame_EditBox_Realm)
+    local lblSearch = GUI:Create("Label")
+    lblSearch:SetFullWidth(GUIConf.labelSearch.fullWidth)
+    lblSearch:SetHeight(100)
+    lblSearch:SetText(GUIConf.labelSearch.text)
+    frame:AddChild(lblSearch)
 
-    -- Create a button
-    local Frame_Button = JustTalentGUI:Create("Button")
-    Frame_Button:SetText("Rechercher")
-    Frame_Button:SetWidth(150)
-    Frame_Button:SetCallback("OnClick", function() print("https://worldofwarcraft.blizzard.com/fr-fr/character/eu/" .. string.lower(editBoxValuePlayerRealm) .. "/" .. string.lower(editBoxValuePlayerName)) end)
-    Frame:AddChild(Frame_Button)
+    local btnSearch = GUI:Create("Button")
+    btnSearch:SetText(GUIConf.btnSearch.text)
+    btnSearch:SetWidth(GUIConf.btnSearch.width)
+    btnSearch:SetCallback("OnClick",function() UpdateLabel(lblSearch, PrintClick()) end)
+    frame:AddChild(btnSearch)
 end
 
+function PrintClick()
+    local active = GetSpecialization()
+    local id, name, description, icon, background, role = GetSpecializationInfo(active)
+    Data.player.spec.id = id
+    Data.player.spec.name = name
+    Data.player.spec.icon = icon
+    return "Class =" .. Data.player.class .. " | Id = ".. Data.player.spec.id .. " | name = ".. Data.player.spec.name .. " | icon = ".. Data.player.spec.icon
+end
+
+function UpdateLabel(label, text)
+    label:SetText(text)
+end
 -----------------------------------------------------------------------
 -- GUI
 -----------------------------------------------------------------------
