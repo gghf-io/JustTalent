@@ -11,3 +11,7 @@ function JTUtils.case(i,d) return function(t) return t[i] or d end end
 function JTUtils.SetPlayerLink(realm,name)
     return "https://worldofwarcraft.blizzard.com/fr-fr/character/eu/" .. string.lower(realm) .. "/" .. string.lower(name)
 end
+
+function JTUtils.SetPlayerFullName(realm,name)
+    return name .. "-" .. realm
+end

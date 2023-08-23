@@ -50,9 +50,20 @@ JTGUI.config = {
             ["position"] = {
                 ["layout"] = "TOP",
                 ["x"] = 0,
-                ["y"] = 0
+                ["y"] = -20
             },
-            ["text"] = "Recherche les meilleurs talent pour"
+            ["typo"] = "GameFontNormalHuge2",
+            ["text"] = "La recherche s'effectue sur"
+        },
+        ["textViewInfo"] = {
+            ["id"] = "$frameLabelSearchInfo",
+            ["position"] = {
+                ["layout"] = "TOP",
+                ["x"] = 0,
+                ["y"] = -50
+            },
+            ["typo"] = "GameFontNormalMed2",
+            ["text"] = ""
         }
     }
 }
@@ -109,8 +120,8 @@ end
 -- 
 -- @return a table of substrings
 function JTGUI.TextView(config, text, parent)
-    local textView = parent:CreateFontString(config.id, "ARTWORK", "GameFontNormalHuge2")
-    textView:SetPoint(config.position.layout)
+    local textView = parent:CreateFontString(config.id, "ARTWORK", config.typo)
+    textView:SetPoint(config.position.layout, config.position.x, config.position.y)
     textView:SetText(text)
     textView:SetVertexColor(1,1,1)
     return textView

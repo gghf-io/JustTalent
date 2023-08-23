@@ -1,6 +1,11 @@
------------------------------------------------------------------------
--- AddOn namespace.
------------------------------------------------------------------------
+
+--        ____.               __ ___________      .__                 __   
+--       |    |__ __  _______/  |\__    ___/____  |  |   ____   _____/  |_ 
+--      |    |  |  \/  ___/\   __\|    |  \__  \ |  | _/ __ \ /    \   __\
+-- /\__|    |  |  /\___ \  |  |  |    |   / __ \|  |_\  ___/|   |  \  |  
+-- \________|____//____  > |__|  |____|  (____  /____/\___  >___|  /__|  
+--                     \/                     \/          \/     \/      
+
 local LibStub = _G.LibStub
 local Self = LibStub("AceAddon-3.0"):NewAddon("JustTalent", "AceConsole-3.0")
 
@@ -36,18 +41,20 @@ end
 
 function Self:OnInitialize()
     private.db = LibStub("AceDB-3.0"):New("JustTalentDB", default, true)
-    private.db.profile.name = UnitName("player")
+    local name, realm = UnitFullName("player")
+    private.db.profile.name = name
+    private.db.profile.realm = realm
     private.db.profile.faction = UnitFactionGroup("player")
     private.db.profile.className = UnitClass("player")
-    Self:Print("[Event] Lifecycle: Initialized " .. private.db.profile.name .. " !")
+    Self:Print("[Event] Lifecycle: Initialized " ..private.db.profile.name .. "-" .. private.db.profile.realm .. " !")
 end
 
 function Self:OnEnable()
-    Self:Print("[Event] Lifecycle: Enabled ".. private.db.profile.name .. " !")
+    Self:Print("[Event] Lifecycle: Enabled " ..private.db.profile.name .. "-" .. private.db.profile.realm .. " !")
 end
 
 function Self:OnDisable()
-    Self:Print("[Event] Lifecycle: Disabled")
+    Self:Print("[Event] Lifecycle: Disabled" ..private.db.profile.name .. "-" .. private.db.profile.realm .. " !")
 end
 
 -----------------------------------------------------------------------
@@ -81,12 +88,20 @@ function Self:SlashCommandOpenMainFrame()
         icon.tex = icon:CreateTexture()
         icon.tex:SetAllPoints(icon)
         icon.tex:SetTexture(self:GetSpecInfo('icon'))
-        
+
         JTGUI.TextView(
             JTGUI.config.widgets.textViewSearch,
-            JTGUI.config.widgets.textViewSearch.text.." "..private.db.profile.className.." "..self:GetSpecInfo("name"),
+            JTGUI.config.widgets.textViewSearch.text.." "..JTUtils.SetPlayerFullName(private.db.profile.realm,private.db.profile.name),
             frame
         )
+
+        JTGUI.TextView(
+            JTGUI.config.widgets.textViewInfo,
+            private.db.profile.className.." "..self:GetSpecInfo("name"),
+            frame
+        )
+
+
         JTGUI.Button(
             JTGUI.config.widgets.btnSearch,
             frame,
@@ -94,6 +109,7 @@ function Self:SlashCommandOpenMainFrame()
                 message("Bonjour")
             end
         )
+
         JTGUI.Button(
             JTGUI.config.widgets.btnClose,
             frame,
