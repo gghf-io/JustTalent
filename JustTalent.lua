@@ -56,8 +56,8 @@ end
 Self:RegisterChatCommand("jt", "SlashCommandOpenMainFrame")
 
 function Self:SlashCommandOpenMainFrame()
-    -- if !private.db.profile.isFrameOpen then
-        -- private.db.profile.isFrameOpen = !private.db.profile.isFrameOpen
+    if(private.db.profile.isFrameOpen == false) then
+        private.db.profile.isFrameOpen = true
         frame = CreateFrame("Frame", nil, UIParent, "BackdropTemplate")
         frame:SetMovable(JTGUI.config.frame.isMovable)
         frame:SetResizable(JTGUI.config.frame.isResizable)
@@ -75,24 +75,44 @@ function Self:SlashCommandOpenMainFrame()
             self:StopMovingOrSizing()
         end)
 
+        local labelSearch = frame:CreateFontString("$frameLabelSearch", "ARTWORK", "GameFontNormalHuge2")
+        labelSearch:SetPoint("TOP", frame, 0, -14)
+        labelSearch:SetText("Recherche les meilleurs talent pour "..private.db.profile.className.." "..self:GetSpecInfo("name"))
+        labelSearch:SetVertexColor(1,1,1)
+
+        -- JTGUI.TextView(
+        --     JTGUI.config.widgets.textViewSearch,
+        --     JTGUI.config.widgets.textViewSearch..""..private.db.profile.className.." "..self:GetSpecInfo("name"),
+        --     frame
+        -- ):SetPoint("TOP", frame, 0, -14)
+
+
         local icon = CreateFrame("Frame", nil, frame)
-        icon:SetPoint("CENTER", 10)
-        icon:SetSize(32, 32)
+        icon:SetPoint("CENTER")
+        icon:SetSize(64, 64)
         icon.tex = icon:CreateTexture()
         icon.tex:SetAllPoints(icon)
         icon.tex:SetTexture(self:GetSpecInfo('icon'))
 
-        local btnClose = CreateFrame("Button", nil, frame, "UIPanelButtonTemplate")
-        btnClose:SetSize(96, 22)
-        btnClose:SetPoint("BOTTOMRIGHT", -16, 14)
-        btnClose:SetText(CLOSE)
-        btnClose:SetScript("OnClick", function()
-            private.db.profile.isFrameOpen = false
-            frame:Hide()
-        end)
-    -- else
-    --     frame:Hide()
-    -- end
+        JTGUI.Button(
+            JTGUI.config.widgets.btnSearch,
+            frame,
+            function()
+                message("Bonjour")
+            end
+        )
+        JTGUI.Button(
+            JTGUI.config.widgets.btnClose,
+            frame,
+            function ()
+                private.db.profile.isFrameOpen = false
+                frame:Hide()
+            end
+        )
+    else
+        private.db.profile.isFrameOpen = false
+        frame:Hide()
+    end
 end
 
 -----------------------------------------------------------------------
