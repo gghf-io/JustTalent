@@ -75,25 +75,18 @@ function Self:SlashCommandOpenMainFrame()
             self:StopMovingOrSizing()
         end)
 
-        local labelSearch = frame:CreateFontString("$frameLabelSearch", "ARTWORK", "GameFontNormalHuge2")
-        labelSearch:SetPoint("TOP", frame, 0, -14)
-        labelSearch:SetText("Recherche les meilleurs talent pour "..private.db.profile.className.." "..self:GetSpecInfo("name"))
-        labelSearch:SetVertexColor(1,1,1)
-
-        -- JTGUI.TextView(
-        --     JTGUI.config.widgets.textViewSearch,
-        --     JTGUI.config.widgets.textViewSearch..""..private.db.profile.className.." "..self:GetSpecInfo("name"),
-        --     frame
-        -- ):SetPoint("TOP", frame, 0, -14)
-
-
         local icon = CreateFrame("Frame", nil, frame)
         icon:SetPoint("CENTER")
         icon:SetSize(64, 64)
         icon.tex = icon:CreateTexture()
         icon.tex:SetAllPoints(icon)
         icon.tex:SetTexture(self:GetSpecInfo('icon'))
-
+        
+        JTGUI.TextView(
+            JTGUI.config.widgets.textViewSearch,
+            JTGUI.config.widgets.textViewSearch.text.." "..private.db.profile.className.." "..self:GetSpecInfo("name"),
+            frame
+        )
         JTGUI.Button(
             JTGUI.config.widgets.btnSearch,
             frame,

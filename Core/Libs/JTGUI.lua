@@ -50,9 +50,9 @@ JTGUI.config = {
             ["position"] = {
                 ["layout"] = "TOP",
                 ["x"] = 0,
-                ["y"] = -14
+                ["y"] = 0
             },
-            ["text"] = "Recherche les meilleurs talent pour "
+            ["text"] = "Recherche les meilleurs talent pour"
         }
     }
 }
@@ -71,7 +71,7 @@ JTGUI.config = {
 -- 
 --      2. position
 -- 
---          . layout = "CENTER" | 
+--          . layout = "CENTER"
 -- 
 --          . x = Integer
 -- 
@@ -89,9 +89,28 @@ function JTGUI.Button(config, parent, OnClick)
     return btn
 end
 
+--- [TextView]
+-- 
+-- Assign a new button config to JGUI.config.widgets with pref btn...
+-- 
+-- @param config
+-- 
+--      1. id = String
+-- 
+--      2. position
+-- 
+--          . layout = "CENTER"
+-- 
+--          . x = Integer
+-- 
+--          . y = Integer
+-- 
+--      3. text = String
+-- 
+-- @return a table of substrings
 function JTGUI.TextView(config, text, parent)
     local textView = parent:CreateFontString(config.id, "ARTWORK", "GameFontNormalHuge2")
-    -- textView:SetPoint(config.position.layout, parent, config.position.layout.x, config.position.layout.y)
+    textView:SetPoint(config.position.layout)
     textView:SetText(text)
     textView:SetVertexColor(1,1,1)
     return textView
