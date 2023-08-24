@@ -15,3 +15,8 @@ end
 function JTUtils.SetPlayerFullName(realm,name)
     return name .. "-" .. realm
 end
+
+function JTUtils.SetWarcraftLogLink(serverId,className,spec)
+    local srvId = 370 -- Hyjal
+    return "https://www.warcraftlogs.com/server/rankings/"..serverId.."/34#metric=playerscore&partition=1&class="..className.."&spec="..spec
+end

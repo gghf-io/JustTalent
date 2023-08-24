@@ -24,6 +24,53 @@ local default = {
     }
 }
 
+local className = {
+    ["Démoniste"] = {
+        ["name"] = "warlock",
+        ["spec"] = {
+            [""] = "",
+            [""] = "",
+            [""] = ""
+        }
+    },
+    ["Guerrier"] = {
+        name = "warrior",
+    },
+    ["Chaman"] = {
+        name = "shaman",
+    },
+    ["Voleur"] = {
+        name = "rogue",
+    },
+    ["Prêtre"] = {
+        name = "priest",
+    },
+    ["Paladin"] = {
+        name = "paladin",
+    },
+    ["Moine"] = {
+        name = "monk",
+    },
+    ["Mage"] = {
+        name = "mage"
+    },
+    ["Chasseur"] = {
+        name = "hunt"
+    },
+    ["Evocateur"] = {
+        name = "evoker"
+    },
+    ["Druide"] = {
+        name = "druid"
+    },
+    ["Chasseur de démon"] = {
+        name = "demon-hunter"
+    },
+    ["Chevalier de la mort"] = {
+        name = "death-knight"
+    }
+}
+
 function Self:GetSpecInfo(key)
     local id, name, desc, icon, role = GetSpecializationInfo(GetSpecialization())
     return JTUtils.case(key) {
@@ -106,7 +153,8 @@ function Self:SlashCommandOpenMainFrame()
             JTGUI.config.widgets.btnSearch,
             frame,
             function()
-                message("Bonjour")
+                local msg = JTUtils.SetWarcraftLogLink(370,className[private.db.profile.className],self:GetSpecInfo("name"))
+                SendSystemMessage()
             end
         )
 
